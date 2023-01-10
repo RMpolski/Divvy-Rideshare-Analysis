@@ -2,6 +2,6 @@
 
 ## December 2022 Test Case
 
-![image](December_revenue_sunburst.html)
+<link href="December_revenue_sunburst.html" rel="import" />
 
-![image](December_Ridecount_sunburst.html)
+<link href="December_Ridecount_sunburst.html" rel="import" />

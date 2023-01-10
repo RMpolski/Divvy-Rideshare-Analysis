@@ -2,6 +2,5 @@
 
 ## December 2022 Test Case
 
-<link href="December_revenue_sunburst.html" rel="import"></link>
 
-<link href="December_Ridecount_sunburst.html" rel="import"></link>
+<link href="https://raw.githack.com/RMpolski/Divvy-Rideshare-Analysis/main/December_Ridecount_sunburst.html"></link>

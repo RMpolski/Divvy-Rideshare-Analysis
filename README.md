@@ -65,7 +65,15 @@ So it is not efficient to detect stations from the bike GPS devices. We instead 
 
 ![image](Figures/Airflowdag.png)
 
-I next set up an Airflow DAG to handle downloading and uploading monthly data to a PostgreSQL database. The DAG is shown above, with a few extra nodes that can be useful for doing catchup from Jan 2021 until December 2022. The three nodes work as follows:
+I next set up an [Airflow DAG](airflowDAG.py) to handle downloading and uploading monthly data to a PostgreSQL database. The DAG is shown above, with a few extra nodes that can be useful for doing catchup from Jan 2021 until December 2022. The three nodes work as follows:
 
-1. divvy-download uses Selenium to open up a webpage, load the table of data links (which required loading some javascript), find data links in the range of January 2021 to the current month, and outputs the latest link URL (it has cases to handle the airflow catchup option when the data has not been uploaded to Postgres at all yet).
-2. 
+1. divvy-download gets the latest data from the Divvy website using 3 steps
+    - Use Selenium to open up a webpage and grab the table of data links (which required loading some javascript),
+    - compare the links from the webpage in the between January 2021 and the current month to the list of uploaded files, and find the link to the latest data that has not been uploaded yet,
+    - take the link and unzip the file where the Postgres server can access it.
+2. upload_postgres creates a table if there is none and then uses sql to transfer data from the downloaded file to the Postgres database.
+3. save_delete_file saves the latest uploaded data link to uploaded_links.txt and then deletes the downloaded file to keep the local directory space from filling up.
+
+The DAG is set to run every month on the 5th, and then if it doesn't work (some files aren't uploaded till a few days later), it will retry daily up to 20 times, until it acheives success.
+
+After running with catchup=True on a local webserver (and using some extra nodes to restrict the DAG to running one instance at a time to completion), the Postgres database shows a min date of 01-01-2021 and a max date of 12-31-2022, as expected.

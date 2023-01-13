@@ -74,6 +74,6 @@ I next set up an [Airflow DAG](airflowDAG.py) to handle downloading and uploadin
 2. upload_postgres creates a table if there is none and then uses sql to transfer data from the downloaded file to the Postgres database.
 3. save_delete_file saves the latest uploaded data link to uploaded_links.txt and then deletes the downloaded file to keep the local directory space from filling up.
 
-The DAG is set to run every month on the 5th, and then if it doesn't work (some files aren't uploaded till a few days later), it will retry daily up to 20 times, until it acheives success.
+The DAG is set to run every month on the 5th, and then if it doesn't work (some files aren't uploaded till a few days later), it returns a log warning saying "No new files available" and will retry daily up to 20 times, until it acheives success.
 
 After running with catchup=True on a local webserver (and using some extra nodes to restrict the DAG to running one instance at a time to completion), the Postgres database shows a min date of 01-01-2021 and a max date of 12-31-2022, as expected.

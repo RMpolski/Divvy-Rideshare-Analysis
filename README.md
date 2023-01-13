@@ -6,9 +6,9 @@ More details
 
 Divvy is a bikeshare program owned by Lyft that aims to help people experience Chicago in a whole new way.
 
-There are over 600 stations and 6000+ bikes across Chicago, and Divvy posts the start/end stations, start/end coordinates, and start/end times of all bike rides, along with the type of user (member or casual) and type of bike (classic, electric, or docked - not sure what docked means). There is no user info, every ride ID is unique. There are a few questions worth examining here.
+There are over 600 stations and 6000+ bikes across Chicago, and Divvy posts the start/end stations, start/end coordinates, and start/end times of all bike rides, along with the type of user (member or casual) and type of bike (classic, electric, or docked - not sure what docked means). There is no user info, every ride ID is unique. The data is open access and can be found at [https://ride.divvybikes.com/system-data](https://ride.divvybikes.com/system-data).
 
-The first type of question is related to what kind of user is involved and how charges are distributed. We have start and end times and formulas to extract charges for each ride. However, we don't have the number of members, so we can't access the revenue from membership fees.
+There are a few questions worth examining here. The first type of question is related to what kind of user is involved and how charges are distributed. We have start and end times and formulas to extract charges for each ride. However, we don't have the number of members, so we can't access the revenue from membership fees.
 
 The second type of question is related to the fact that bike stations each have a fixed number of spots for bikes. This leaves a big problem if users ride up to a full bike station and cannot deposit their bikes. The bikes either need to be ridden to another station, the users need to wait for someone to open new spots at the station, or the bikes will get dropped off in somewhat random places. This could also cost users more than they planned to spend since single bike rides are limited to 30 minutes. Alternatively, users could plan to use bikes at a station but find the station empty. Either of these cases will degrade the user experience and lead to people avoiding Divvy in the future. These sorts of cases lead to the company needing people to bring the bikes back to stations or redistribute them from full stations to empty stations.
 
@@ -60,3 +60,10 @@ We first found that the GPS data from individual bike rides are highly scattered
 So it is not efficient to detect stations from the bike GPS devices. We instead use the names from the bike ride data, a little cleaning, and we implement the geospatial data from the station dataset. After some manipulation, we quantify the bike surplus for each station over time. We add this data to a Kepler graph to get an interactive visualization that allows us to see when bike stations are over (surplus) or under (deficit) their median capacity. In the graph below, green represents a surplus, and purple represents a deficit. Light values mean the stations are close to the median capacity. The draggable time range can be used to see how these surpluses and deficits evolve with time. This would be useful for determining when to encourage redistributing bikes.
 
 ![image](Figures/KeplerRideSurplus.png)
+
+## Set up an airflow schedule to pull in monthly data to a PostgreSQL database
+
+![image](Figures/Airflowdag.png)
+
+I next set up an Airflow DAG to handle downloading and uploading monthly data to a PostgreSQL database. The DAG is shown above, with a few extra nodes that can be useful for doing catchup from Jan 2021 until December 2022. The three nodes work as follows:
+

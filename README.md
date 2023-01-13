@@ -67,3 +67,5 @@ So it is not efficient to detect stations from the bike GPS devices. We instead 
 
 I next set up an Airflow DAG to handle downloading and uploading monthly data to a PostgreSQL database. The DAG is shown above, with a few extra nodes that can be useful for doing catchup from Jan 2021 until December 2022. The three nodes work as follows:
 
+1. divvy-download uses Selenium to open up a webpage, load the table of data links (which required loading some javascript), find data links in the range of January 2021 to the current month, and outputs the latest link URL (it has cases to handle the airflow catchup option when the data has not been uploaded to Postgres at all yet).
+2. 

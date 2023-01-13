@@ -76,7 +76,6 @@ def divvy_download_func(ti, *args, uploaded_filename=None, **kwargs):
     driver.close()
     links = sort_dates(links)
     download_link = get_download_link(links, uploaded_filename)
-    logger.warning(download_link)
     saved_filename = save_link_file(download_link)
 
     ti.xcom_push(value={'saved_filename': saved_filename,

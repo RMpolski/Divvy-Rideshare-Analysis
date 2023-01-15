@@ -1,5 +1,4 @@
 from airflow import DAG
-# from airflow.decorators import task
 from airflow.providers.common.sql.operators.sql import SQLExecuteQueryOperator
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator
@@ -53,7 +52,7 @@ with DAG(dag_id=DAG_ID,
     
 #     COMPLETE = EmptyOperator(task_id='All_Tasks_Completed')
     
-    # uncomment and place in the line if doing catchup.
+    # uncomment and place PREVIOUS and COMPLETE in the line if doing catchup.
     # Also, at least with my setup, it required manually changing PREVIOUS to 'success'
     #PREVIOUS >> 
     divvy_download >> upload_postgres >> save_delete_file

@@ -15,10 +15,10 @@ _get_proxy_settings()
 #######
 
 DAG_ID = 'divvy_to_postgres'
-
 CONN_ID = 'postgres_default'  # used the UI to set up the connection to the database
 
-uploaded_filename = 'uploaded_links.txt'
+file_url = 'https://divvy-tripdata.s3.amazonaws.com/index.html'  # page where the data can be downloaded
+uploaded_filename = 'uploaded_links.txt'  # file listing links to data already uploaded
 
 with DAG(dag_id=DAG_ID,
          start_date=datetime(2021, 1, 5, 18),
@@ -29,7 +29,8 @@ with DAG(dag_id=DAG_ID,
 
     divvy_download = PythonOperator(task_id='divvy_download',
                                     python_callable=divvy_download_func,
-                                    op_kwargs={'uploaded_filename': uploaded_filename},
+                                    op_kwargs={'uploaded_filename': uploaded_filename,
+                                               'file_url': file_url},
                                     retry_delay=timedelta(days=1), retries=20)
         
     upload_postgres = SQLExecuteQueryOperator(task_id='upload_postgres',

@@ -102,16 +102,17 @@ def save_link_file(link_name):
     
     return download_folder + fname
 
-def divvy_download_func(ti, *args, uploaded_filename=None, **kwargs):
+def divvy_download_func(ti, *args, file_url=None, uploaded_filename=None, **kwargs):
     """The Python Callable function that runs in the Airflow task divvy_download.
     Parameters
     ti: airflow task instance required for xcom operations
-    uploaded_filename: filename containing the data links already uploaded to Postgres.
-                       Must be specified, but it worked best with the set up when a kwarg.
+    file_url:           the url with a table of links to the divvy data.
+                        Required, but it worked best with the setup when a kwarg.
+    uploaded_filename:  filename containing the data links already uploaded to Postgres.
+                        Required, but it worked best with the setup when a kwarg.
     
     Pushes to xcom a dict with the saved .csv filename (full path), and the link to the
     downloaded data file."""
-    file_url = 'https://divvy-tripdata.s3.amazonaws.com/index.html'
     links = extract_data_links(file_url, 2021, datetime.now().year)
     links = sort_dates(links)
     download_link = get_download_link(links, uploaded_filename)

@@ -1,5 +1,7 @@
 # Divvy Rideshare Analysis
 
+This was mostly some old, simple experimentation with DAGs/backfilling, and some super basic analysis.
+
 TLDR: We used Divvy bikeshare data from chicago to visualize the distribution of revenue between types of bikes and types of customers (members or non-members). We also used geospatial data to track station usage over the region and the amount of station bike number surpluses/deficits for each station.
 
 More details
